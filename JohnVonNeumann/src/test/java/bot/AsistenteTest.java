@@ -22,6 +22,25 @@ public class AsistenteTest {
 			
 			Assert.assertEquals("De nada!", xerox.devolverAgradecimiento(mensaje));
 		}
+}
+		
+		@Test
+		public void devuelveElSaludo() {
+			
+			String[] mensajes1 = {
+					"¡Hola, @botMan!",
+					"@botMan hola!",
+					"buen dia @jenkins",
+					"@botMan, buenas tardes",
+					"hey @botMan"
+			};
+			
+			Asistente botMan = new Asistente();
+			
+			for(String mensaje : mensajes1) {
+				
+				Assert.assertEquals("Hola, UserX!", botMan.devolverSaludo(mensaje));
+			}
+		}
 		
 	}
-}

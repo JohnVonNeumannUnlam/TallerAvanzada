@@ -27,6 +27,6 @@ public class Weather {
 	      e.printStackTrace();
 	    }
 	    return ret;
-	  }
 	}
-
+}
+	
