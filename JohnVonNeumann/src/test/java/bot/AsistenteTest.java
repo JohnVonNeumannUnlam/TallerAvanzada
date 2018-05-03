@@ -5,6 +5,8 @@ import org.junit.Test;
 
 public class AsistenteTest {
 	
+	public final static String USUARIO = "fns92";
+	
 	@Test
 	public void devuelveElAgradecimiento() {
 		
@@ -16,11 +18,11 @@ public class AsistenteTest {
 				"En fin. Muchisimas Gracias por todo."
 		};
 
-		Asistente xerox = new Asistente();
+		Asistente xerox = new Asistente("Xerox");
 		
 		for(String mensaje : mensajes) {
 			
-			Assert.assertEquals("De nada!", xerox.devolverAgradecimiento(mensaje));
+			Assert.assertEquals("¡De nada, @fns92!", xerox.devolverAgradecimiento(mensaje, USUARIO));
 		}
 }
 		
@@ -35,11 +37,11 @@ public class AsistenteTest {
 					"hey @botMan"
 			};
 			
-			Asistente botMan = new Asistente();
+			Asistente botMan = new Asistente("botMan");
 			
 			for(String mensaje : mensajes1) {
 				
-				Assert.assertEquals("Hola, UserX!", botMan.devolverSaludo(mensaje));
+				Assert.assertEquals("¡Hola, @fns92!", botMan.devolverSaludo(mensaje, USUARIO));
 			}
 		}
 		
