@@ -133,18 +133,20 @@ public class Asistente {
 			if(entrada.matches(".*quiero un (gif|GIF) de.*")) {
 				String input = entrada.split("quiero un gif de ")[1];
 				String url = GiphySearch.buscarGIF(input);
-				GiphySearch.mostrarGif(url);
-				return "@"+user+" " +"Disfruta este tremendo gif padre"; 
-				
+//				GiphySearch.mostrarGif(url);
+//				return "@"+user+" " +"Disfruta este tremendo gif padre"; 
+				return url;
 			}
 			if(entrada.matches(".*quiero un (gag|GAG).*")){
-				NineGAG.buscarGAG();
-				return "@"+user+" "+"Disfruta este tremendo GAG padre"; 
+				String url = NineGAG.buscarGAG();
+//				return "@"+user+" "+"Disfruta este tremendo GAG padre"; 
+				return url;
 			}
 			if(entrada.matches(".*quiero un meme de.*")) {
 				String input = entrada.split("quiero un meme de ")[1];
-				Meme.mostrarMeme(input);
-				return "@"+user+" "+"Que buen momazo";
+				String url = Meme.mostrarMeme(input);
+//				return "@"+user+" "+"Que buen momazo";
+				return url;
 			}
 		}
 		catch (Exception e) {

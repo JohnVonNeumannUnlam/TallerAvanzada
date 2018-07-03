@@ -14,7 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class Meme {
 
-	public static void mostrarMeme(String nombreMeme) {// el asistente deberia llamar el metodo pasandome el nombre del
+	public static String mostrarMeme(String nombreMeme) {// el asistente deberia llamar el metodo pasandome el nombre del
 														// meme.
 
 		HashMap<String, String> map = new HashMap<String, String>(); // Creo un hashmap donde la clave es el nombre del
@@ -40,40 +40,43 @@ public class Meme {
 		map.put("atendedor",
 				"https://vignette.wikia.nocookie.net/memes-pedia/images/c/c3/AtiendeBoludos.jpg/revision/latest?cb=20160227164018&path-prefix=es");
 		map.put("ste men", "https://pm1.narvii.com/6264/0704a2819b6e6491c5f3f0598b5e6f5937076757_hq.jpg");
-
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-						| UnsupportedLookAndFeelException ex) {
-				}
-
-				try {
-					URL url = new URL(map.get(nombreMeme));// agarro la url dependiendo que nombre del meme pasaron por
-															// parametro
-					BufferedImage image = ImageIO.read(url);
-					JLabel label = new JLabel(new ImageIcon(image));// esto es toda la gilada para poder mostrarlo. va a
-																	// depender de como es la interfaz.
-					JFrame f = new JFrame();
-					f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					f.getContentPane().add(label);
-					f.pack();
-					f.setLocation(200, 200);
-					f.setVisible(true);
-				} catch (Exception exp) {
-					exp.printStackTrace();
-				}
-
-			}
-		});
+		
+		String url = map.get(nombreMeme);
+		return url;
+		
+//		EventQueue.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//						| UnsupportedLookAndFeelException ex) {
+//				}
+//
+//				try {
+//					URL url = new URL(map.get(nombreMeme));// agarro la url dependiendo que nombre del meme pasaron por
+//															// parametro
+//					BufferedImage image = ImageIO.read(url);
+//					JLabel label = new JLabel(new ImageIcon(image));// esto es toda la gilada para poder mostrarlo. va a
+//																	// depender de como es la interfaz.
+//					JFrame f = new JFrame();
+//					f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//					f.getContentPane().add(label);
+//					f.pack();
+//					f.setLocation(200, 200);
+//					f.setVisible(true);
+//				} catch (Exception exp) {
+//					exp.printStackTrace();
+//				}
+//
+//			}
+//		});
 	}
 
 	public static void main(String[] args) {
 
-		Meme.mostrarMeme("ste men");
-
+		String url = Meme.mostrarMeme("ste men");
+		System.out.println(url);
 	}
 
 }
