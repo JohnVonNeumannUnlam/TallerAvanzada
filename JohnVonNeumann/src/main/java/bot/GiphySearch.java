@@ -31,24 +31,24 @@ public class GiphySearch {
 
 	}
 
-	public static void mostrarGif(String URL) throws MalformedURLException {
-		URL url = new URL(URL);
-		Icon icon = new ImageIcon(url);
-		JLabel label = new JLabel(icon);
-
-		JFrame f = new JFrame("GIF");
-		f.getContentPane().add(label);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setVisible(true);
-	}
+//	public static void mostrarGif(String URL) throws MalformedURLException {
+//		URL url = new URL(URL);
+//		Icon icon = new ImageIcon(url);
+//		JLabel label = new JLabel(icon);
+//
+//		JFrame f = new JFrame("GIF");
+//		f.getContentPane().add(label);
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		f.pack();
+//		f.setLocationRelativeTo(null);
+//		f.setVisible(true);
+//	}
 
 	public static void main(String[] args) throws GiphyException, MalformedURLException {
 		GiphySearch gs = new GiphySearch();
 		String url = gs.buscarGIF("sasha gray");
-		gs.mostrarGif(url);
-
+//		gs.mostrarGif(url);
+		System.out.println(url);
 	}
 
 }

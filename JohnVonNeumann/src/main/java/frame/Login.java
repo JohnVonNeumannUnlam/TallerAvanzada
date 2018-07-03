@@ -19,6 +19,7 @@ public class Login {
 	JFrame frmChatbot;
 	private JTextField usuarioTxtField;
 	private JTextField passTxtField;
+	private String usr; 
 
 	/**
 	 * Launch the application.
@@ -78,7 +79,7 @@ public class Login {
 		btnConectarse.setFont(new Font("Consolas", Font.PLAIN, 15));
 		btnConectarse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String usr = usuarioTxtField.getText();
+				usr = usuarioTxtField.getText();
 				String pass = passTxtField.getText();
 				Conector con = new Conector();
 				con.connect();
@@ -97,6 +98,9 @@ public class Login {
 								JOptionPane.ERROR_MESSAGE);
 					} else {
 						System.out.println("Adentro");
+						Sala s = new Sala();
+						s.salaFrame.setVisible(true);
+						frmChatbot.dispose();
 					}
 				}
 				con.close();
