@@ -6,14 +6,14 @@ import java.util.Date;
 
 public class Asistente {
 	
-	String nombreAsistente;
+	static String nombreAsistente;
 	
 	public Asistente(String nombreAsistente) {
 		super();
 		this.nombreAsistente = nombreAsistente;
 	}
 
-	public String enviar(String user, String entrada) throws Exception {
+	public static String enviar(String user, String entrada) throws Exception {
 				
 		
 		try {
@@ -157,7 +157,7 @@ public class Asistente {
 		return "No entendi lo que me dijiste @"+user+", podrias repetirlo?";
 	}
 
-	public String getNombreAsistente() {
+	public static String getNombreAsistente() {
 		return nombreAsistente;
 	}
 

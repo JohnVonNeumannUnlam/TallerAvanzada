@@ -21,7 +21,7 @@ public class Login {
 	private JTextField passTxtField;
 	private String usr; 
 
-	/**
+	/**	
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -31,7 +31,7 @@ public class Login {
 					Login window = new Login();
 					window.frmChatbot.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					e.printStackTrace();	
 				}
 			}
 		});
@@ -94,12 +94,14 @@ public class Login {
 								"Usuario inexistente", JOptionPane.ERROR_MESSAGE);
 					} else if (con.mostrarUsuario(usr) && (con.mostrarPassword(pass) == false)) {
 
-						JOptionPane.showMessageDialog(null, "La contraseña no es valida", "Contraseña incorrecta",
+						JOptionPane.showMessageDialog(null, "La contraseï¿½a no es valida", "Contraseï¿½a incorrecta",
 								JOptionPane.ERROR_MESSAGE);
 					} else {
-						System.out.println("Adentro");
-						Sala s = new Sala();
-						s.salaFrame.setVisible(true);
+						
+						servidor.Usuario usuario = new servidor.Usuario(usr);
+						VentanaChat vc = new VentanaChat(usuario);
+						vc.setVisible(true);
+						
 						frmChatbot.dispose();
 					}
 				}

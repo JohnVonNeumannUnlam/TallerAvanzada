@@ -1,209 +1,261 @@
-package frame;
+	package frame;
+	
+	import cliente.entidades.Usuario;
+import servidor.Sala;
+import servidor.Servidor;
 
-import socket.Usuario;
-import socket.Sala;
-import socket.Servidor;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-import javax.swing.text.DefaultCaret;
-
-public class VentanaChat extends javax.swing.JFrame {
-
-	NetworkManager net;
-	DefaultListModel<String> mlu;
-
-	public VentanaChat() {
-
-		net = NetworkManager.getInstance();
-		net.setServer(leerIP(), 5000);
-		net.setInterfaz(this);
-		net.enviar("Usuario " + leerNick());
-		mlu = new DefaultListModel<>();
-		initComponents();
-		setComponentsExtras();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				net.escucharServidor();
-			}
-		}).start();
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				net.enviar("EXIT");
-			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	// <editor-fold defaultstate="collapsed" desc="Generated
-	// Code">//GEN-BEGIN:initComponents
-	private void initComponents() {
-
-		fieldMsg = new javax.swing.JTextField();
-		btEnviar = new javax.swing.JButton();
-		jScrollPane2 = new javax.swing.JScrollPane();
-		areaMensajes = new javax.swing.JTextPane();
-		jScrollPane3 = new javax.swing.JScrollPane();
-		jList1 = new javax.swing.JList();
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-		fieldMsg.addKeyListener(new java.awt.event.KeyAdapter() {
-			public void keyPressed(java.awt.event.KeyEvent evt) {
-				fieldMsgKeyPressed(evt);
-			}
-		});
-
-		btEnviar.setText("Enviar");
-		btEnviar.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btEnviarActionPerformed(evt);
-			}
-		});
-
-		areaMensajes.setEditable(false);
-		// areaMensajes.setColumns(20);
-		// areaMensajes.setLineWrap(true);
-		// areaMensajes.setRows(5);
-		areaMensajes.setToolTipText("");
-		// areaMensajes.setWrapStyleWord(true);
-		jScrollPane2.setViewportView(areaMensajes);
-
-		jList1.setModel(mlu);
-		jList1.setFixedCellHeight(20);
-		jScrollPane3.setViewportView(jList1);
-
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(fieldMsg)
-								.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-								.addComponent(btEnviar, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup().addContainerGap()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 309,
-												Short.MAX_VALUE)
-										.addComponent(jScrollPane3))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(fieldMsg, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(btEnviar))
-								.addContainerGap()));
-
-		pack();
-	}// </editor-fold>//GEN-END:initComponents
-
-	private void btEnviarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btEnviarActionPerformed
-		// Enviamos el mensaje al servidor
-		net.enviar(fieldMsg.getText());
-		agregarMensaje(fieldMsg.getText());
-
-		// Limpiamos el campo de texto
-		fieldMsg.setText("");
-	}// GEN-LAST:event_btEnviarActionPerformed
-
-	private void fieldMsgKeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_fieldMsgKeyPressed
-		if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-			btEnviarActionPerformed(null);
-		}
-	}// GEN-LAST:event_fieldMsgKeyPressed
-
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-		// (optional) ">
-		/*
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-		 * look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+import java.awt.Image;
+	import java.awt.event.KeyEvent;
+	import java.awt.event.WindowAdapter;
+	import java.awt.event.WindowEvent;
+	import java.net.URL;
+	
+	import javax.swing.DefaultListModel;
+	import javax.swing.ImageIcon;
+	import javax.swing.JOptionPane;
+	import javax.swing.text.DefaultCaret;
+	import javax.swing.text.Document;
+	import javax.swing.GroupLayout.Alignment;
+	import javax.swing.GroupLayout;
+	import javax.swing.LayoutStyle.ComponentPlacement;
+	import javax.swing.JScrollPane;
+	import javax.swing.JList;
+	
+	public class VentanaChat extends javax.swing.JFrame {
+	
+		/**
+		 * 
 		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
+		private static final long serialVersionUID = 1L;
+		NetworkManager net;
+		DefaultListModel<String> mlu;
+		DefaultListModel<String> salas;
+	
+		public VentanaChat(servidor.Usuario u) {
+			net = NetworkManager.getInstance();
+			net.setServer(leerIP(), 2014);
+			net.setInterfaz(this);
+			net.enviar("NICK " + u.getNick());
+			mlu = new DefaultListModel<>();
+			salas =  new DefaultListModel<>();
+			initComponents();
+			setComponentsExtras();
+	
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					net.escucharServidor();
 				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+			}).start();
+			addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					net.enviar("EXIT");
+				}
+			});
 		}
-		// </editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new VentanaChat().setVisible(true);
-			}
-		});
-	}
-
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JTextPane areaMensajes;
-	private javax.swing.JButton btEnviar;
-	private javax.swing.JTextField fieldMsg;
-	private javax.swing.JList jList1;
-	private javax.swing.JScrollPane jScrollPane2;
-	private javax.swing.JScrollPane jScrollPane3;
-	// End of variables declaration//GEN-END:variables
-
-	public void agregarUsuario(Usuario u) {
-		mlu.addElement(u.getNombreUsuario());
-	}
-
-	public void agregarMensaje(String s) {
-		if (areaMensajes.getText().equals("")) {
-			areaMensajes.setText(s + "\n");
-		} else {
-			areaMensajes.setText(areaMensajes.getText() + s + '\n');
+	
+		public VentanaChat() {
+			
 		}
-//		areaMensajes.setText(s);
-	}
 
-	public void limpiarListado() {
-		mlu.clear();
+		@SuppressWarnings("unchecked")
+		// <editor-fold defaultstate="collapsed" desc="Generated
+		// Code">//GEN-BEGIN:initComponents
+		private void initComponents() {
+	
+			fieldMsg = new javax.swing.JTextField();
+			btEnviar = new javax.swing.JButton();
+			jScrollPane2 = new javax.swing.JScrollPane();
+			areaMensajes = new javax.swing.JTextPane();
+			jScrollPane3 = new javax.swing.JScrollPane();
+			jList1 = new javax.swing.JList();
+	
+			setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+	
+			fieldMsg.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent evt) {
+					fieldMsgKeyPressed(evt);
+				}
+			});
+	
+			btEnviar.setText("Enviar");
+			btEnviar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent evt) {
+					btEnviarActionPerformed(evt);
+				}
+			});
+	
+			areaMensajes.setEditable(false);
+			// areaMensajes.setColumns(20);
+			// areaMensajes.setLineWrap(true);
+			// areaMensajes.setRows(5);
+	//		areaMensajes.setToolTipText("");
+			// areaMensajes.setWrapStyleWord(true);
+			jScrollPane2.setViewportView(areaMensajes);
+	
+			jList1.setModel(mlu);
+			jList1.setFixedCellHeight(20);
+			jScrollPane3.setViewportView(jList1);
+			
+			JScrollPane scrollPane = new JScrollPane();
+	
+			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+			layout.setHorizontalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addGroup(layout.createSequentialGroup()
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
+							.addComponent(fieldMsg, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(btEnviar, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap())
+			);
+			layout.setVerticalGroup(
+				layout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+							.addComponent(jScrollPane3, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+							.addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(fieldMsg, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btEnviar))
+						.addContainerGap())
+			);
+			
+			JList list = new JList();
+			list.setModel(salas);
+			scrollPane.setViewportView(list);
+			getContentPane().setLayout(layout);	
+	
+			pack();
+		}// </editor-fold>//GEN-END:initComponents
+	
+		private void btEnviarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btEnviarActionPerformed
+			// Enviamos el mensaje al servidor
+			net.enviar(fieldMsg.getText());
+			// Limpiamos el campo de texto
+			fieldMsg.setText("");
+		}// GEN-LAST:event_btEnviarActionPerformed
+	
+		private void fieldMsgKeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_fieldMsgKeyPressed
+			if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+				btEnviarActionPerformed(null);
+			}
+		}// GEN-LAST:event_fieldMsgKeyPressed
+	
+		public static void main(String args[]) {
+			/* Set the Nimbus look and feel */
+			// <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+			// (optional) ">
+			/*
+			 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+			 * look and feel. For details see
+			 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+			 */
+			try {
+				for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+					if ("Nimbus".equals(info.getName())) {
+						javax.swing.UIManager.setLookAndFeel(info.getClassName());
+						break;
+					}
+				}
+			} catch (ClassNotFoundException ex) {
+				java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
+						ex);
+			} catch (InstantiationException ex) {
+				java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
+						ex);
+			} catch (IllegalAccessException ex) {
+				java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
+						ex);
+			} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+				java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
+						ex);
+			}
+			// </editor-fold>
+	
+			/* Create and display the form */
+			java.awt.EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					new VentanaChat().setVisible(true);
+				}
+			});
+		}
+	
+		// Variables declaration - do not modify//GEN-BEGIN:variables
+		private javax.swing.JTextPane areaMensajes;
+		private javax.swing.JButton btEnviar;
+		private javax.swing.JTextField fieldMsg;
+		private javax.swing.JList jList1;
+		private javax.swing.JScrollPane jScrollPane2;
+		private javax.swing.JScrollPane jScrollPane3;
+		// End of variables declaration//GEN-END:variables
+	
+		public void agregarUsuario(Usuario u) {
+			mlu.addElement(u.getNick());
+		}
+		
+		public void agregarSala(Sala s) {
+			salas.addElement(s.getNombre());
+		}
+		
+		public void agregarMensaje(String s) {
+	
+			System.out.println(s);
+	
+			Document doc = areaMensajes.getDocument();
+	
+			try {
+				if (!areaMensajes.getText().equals("")) {
+					if (s.contains("http://") || s.contains("https://")) {
+						String usuario = s.split(" ")[0];
+						String s2 = s.split("://")[1];
+						ImageIcon ico = new ImageIcon(new URL("https://" + s2));
+						Image image = ico.getImage();
+						int new_width = 200;
+						int new_height = (int) (new_width * ((double) ico.getIconHeight() / (double) ico.getIconWidth()));
+						Image newimg = image.getScaledInstance(new_width, new_height, java.awt.Image.SCALE_DEFAULT);
+						ico = new ImageIcon(newimg);
+						doc.insertString(doc.getLength(), "\n" + usuario + " ", null);
+						areaMensajes.insertIcon(ico);
+					} else
+						doc.insertString(doc.getLength(), "\n" + s, null);
+				} else
+					areaMensajes.setText(s);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+		}
+	
+		public void limpiarListado() {
+			mlu.clear();
+		}
+	
+		private void setComponentsExtras() {
+			DefaultCaret caret = (DefaultCaret) areaMensajes.getCaret();
+			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			jList1.setFixedCellHeight(20);
+			setLocationRelativeTo(null);
+			fieldMsg.requestFocus();
+		}
+	
+		private String leerIP() {
+			return "localhost";
+		}
+	
+//		private String leerNick(Usuario u) {
+//			return u.getNick();
+//		}
 	}
-
-	private void setComponentsExtras() {
-		DefaultCaret caret = (DefaultCaret) areaMensajes.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		jList1.setFixedCellHeight(20);
-		setLocationRelativeTo(null);
-		fieldMsg.requestFocus();
-	}
-
-	private String leerIP() {
-		return "localhost";
-	}
-
-	private String leerNick() {
-		return JOptionPane.showInputDialog(null, "Introduce tu nombre de usuario", "Usuario");
-	}
-
-}
