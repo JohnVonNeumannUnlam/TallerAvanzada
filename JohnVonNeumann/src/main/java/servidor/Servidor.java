@@ -5,28 +5,31 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import bot.Asistente;
 
 public class Servidor {
-    public static final int PUERTO = 2014;
     public static ArrayList<Sala> listadoSalas;
     public static final String ADMIN_PASSWORD = "admin";
     public static boolean saveLogs = true;
 
     public static void main(String[] args) throws IOException {
-        if (saveLogs) System.out.println("Guardado de logs habilitado"); else System.out.println("Guardado de logs deshabilitado");
+        
+    	final int PORT = Integer.parseInt(Servidor.leerPuerto());
+    	
+    	if (saveLogs) System.out.println("Guardado de logs habilitado"); else System.out.println("Guardado de logs deshabilitado");
         
         //Creamos el socket para escuchar las conexiones entrantes
-        ServerSocket ss = new ServerSocket(PUERTO);
+        ServerSocket ss = new ServerSocket(PORT);
         
-        Log.log("Servidor inicializado en el puerto " + PUERTO);
+        Log.log("Servidor inicializado en el puerto " + PORT);
         
         //Inicializamos el listado de salas, creamos la sala "Principal", que es
         //la sala por defecto y la agregamos al listado de salas
         listadoSalas = new ArrayList<>();
         Sala sala = new Sala("Principal");
         Asistente a = new Asistente("Robotitus");
-//        System.out.println(a);
         agregarSala(sala);
         
         //Bucle infinito que espera peticiones de conexión y crea instancias independientes para cada una
@@ -82,5 +85,9 @@ public class Servidor {
         }
         return false;
     }
+    
+    private static String leerPuerto() {
+		return JOptionPane.showInputDialog(null, "Introduce el numero del puerto", "PORT");
+	}
 
 }

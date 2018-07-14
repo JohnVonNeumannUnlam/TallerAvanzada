@@ -7,7 +7,7 @@ public class Noticias {
 		String ciudad = Jsonapis.obtenerCiudad();
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(Weather.temperatura(ciudad)+"\n\n");
+		sb.append(Jsonapis.temperatura(ciudad)+"\n\n");
 		sb.append(Fecha.hora()+"\n\n");
 		sb.append(Jsonapis.obtenerDolar()+"\n");
 		sb.append("---NOTICIAS---\n\n");

@@ -56,17 +56,6 @@ public class Search extends Application{
 	        public void initialize(HttpRequest request) throws IOException {}
 	      }).setApplicationName("youtube-cmdline-search-sample").build();
 	      
-
-//	    	    String inputQuery = "";
-//
-//	    	    System.out.print("Ingrese su busqueda: ");
-//	    	    BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
-//	    	    inputQuery = bReader.readLine();
-//
-//	    	    if (inputQuery.length() < 1) {
-//	    	      String queryTerm = "YouTube Developers Live";
-//	    	    }
-
 	      YouTube.Search.List search = youtube.search().list("id,snippet");
 	      String apiKey = properties.getProperty("youtube.apikey");
 	      search.setKey(apiKey);
@@ -89,7 +78,6 @@ public class Search extends Application{
   public String prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) {
 
 	  String video =null;
-	  //String url = "http://www.youtube.com/watch?v=";
 
     if (iteratorSearchResults.hasNext()) {
 

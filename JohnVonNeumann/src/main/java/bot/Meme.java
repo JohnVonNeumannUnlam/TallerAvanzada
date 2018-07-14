@@ -1,16 +1,6 @@
 package bot;
 
-import java.awt.EventQueue;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class Meme {
 
@@ -43,34 +33,6 @@ public class Meme {
 		
 		String url = map.get(nombreMeme);
 		return url;
-		
-//		EventQueue.invokeLater(new Runnable() {
-//			@Override
-//			public void run() {
-//				try {
-//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-//						| UnsupportedLookAndFeelException ex) {
-//				}
-//
-//				try {
-//					URL url = new URL(map.get(nombreMeme));// agarro la url dependiendo que nombre del meme pasaron por
-//															// parametro
-//					BufferedImage image = ImageIO.read(url);
-//					JLabel label = new JLabel(new ImageIcon(image));// esto es toda la gilada para poder mostrarlo. va a
-//																	// depender de como es la interfaz.
-//					JFrame f = new JFrame();
-//					f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//					f.getContentPane().add(label);
-//					f.pack();
-//					f.setLocation(200, 200);
-//					f.setVisible(true);
-//				} catch (Exception exp) {
-//					exp.printStackTrace();
-//				}
-//
-//			}
-//		});
 	}
 
 	public static void main(String[] args) {

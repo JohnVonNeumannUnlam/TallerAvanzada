@@ -37,10 +37,10 @@ public class VentanaChat extends javax.swing.JFrame {
 	DefaultListModel<String> salas;
 	String user;
 
-	public VentanaChat(servidor.Usuario u) {
+	public VentanaChat(servidor.Usuario u, String ip, Integer port) {
 
 		net = NetworkManager.getInstance();
-		net.setServer(leerIP(), 2014);
+		net.setServer(ip, port);
 		net.setInterfaz(this);
 		net.enviar("NICK " + u.getNick());
 		user = u.getNick();
@@ -95,11 +95,6 @@ public class VentanaChat extends javax.swing.JFrame {
 		});
 
 		areaMensajes.setEditable(false);
-		// areaMensajes.setColumns(20);
-		// areaMensajes.setLineWrap(true);
-		// areaMensajes.setRows(5);
-		// areaMensajes.setToolTipText("");
-		// areaMensajes.setWrapStyleWord(true);
 		jScrollPane2.setViewportView(areaMensajes);
 
 		jList1.setModel(mlu);
@@ -188,45 +183,6 @@ public class VentanaChat extends javax.swing.JFrame {
 		}
 	}// GEN-LAST:event_fieldMsgKeyPressed
 
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-		// (optional) ">
-		/*
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-		 * look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(VentanaChat.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		}
-		// </editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new VentanaChat().setVisible(true);
-			}
-		});
-	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JTextPane areaMensajes;
@@ -297,10 +253,6 @@ public class VentanaChat extends javax.swing.JFrame {
 		return "localhost";
 
 	}
-
-	// private String leerNick(Usuario u) {
-	// return u.getNick();
-	// }
 
 	private String leerSala() {
 		return JOptionPane.showInputDialog(null, "Introduce el nombre de la nueva sala", "Sala");

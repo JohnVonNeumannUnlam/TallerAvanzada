@@ -8,13 +8,13 @@ class WeatherTest {
 
 	@Test
 	void necochea() {
-		System.out.println(Weather.temperatura("necochea"));
+		System.out.println(Jsonapis.temperatura("necochea"));
 		Assert.assertTrue(true);
 	}
 	
 	@Test
 	void merlo() {
-		System.out.println(Weather.temperatura("merlo,AR"));
+		System.out.println(Jsonapis.temperatura("merlo,AR"));
 		Assert.assertTrue(true);
 	}
 
