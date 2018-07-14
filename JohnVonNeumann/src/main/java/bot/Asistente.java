@@ -143,7 +143,7 @@ public class Asistente {
 			}
 			if(entrada.matches(".*quiero saber el resultado de.*")) {
 				String input = entrada.split("quiero saber el resultado de ")[1];
-				return Calculadora.resolverCalculo(input);
+				return "@"+user+" El resultado es: "+Calculadora.resolverCalculo("\""+input+"\"");
 			}
 			if(entrada.matches(".*quiero informacion sobre.*")) {
 				String input = entrada.split("quiero informacion sobre ")[1];
