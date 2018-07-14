@@ -10,9 +10,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import servidor.Log;
-import servidor.Sala;
-import servidor.Servidor;
 
 public class NetworkManager {
     
@@ -46,7 +43,7 @@ public class NetworkManager {
                     String[] p = packet.split("[ ]");
                     interfaz.setTitle("Sala " + p[1] + "@" + socket.getInetAddress().getHostAddress());
                 } else if (packet.startsWith("LIST")) {
-                	System.out.println(packet);
+//                	System.out.println(packet);
 //                	System.out.println("rimo todo con ado");
                     interfaz.limpiarListado();
                     int count = packet.split(" ").length;
@@ -58,8 +55,22 @@ public class NetworkManager {
 //                        for(int j=0; j<s.length; j++)
 //                        	interfaz.agregarSala(s[j]);
                     }
+
+
                     
                     //interfaz.actualizarLista();
+
+
+				}else if (packet.startsWith("LSALAS")) {
+                	interfaz.limpiarSalas();
+                    int count = packet.split("[ ]").length;
+                    for (int i = 1; i < count; i++) {
+//                        Usuario u = new Usuario(packet.split("[ ]")[i], null);
+                        interfaz.agregarSala(packet.split("[ ]")[i]);
+                    } 
+
+
+
                 } else if(!packet.isEmpty()) {
                     interfaz.agregarMensaje(packet);
                 }

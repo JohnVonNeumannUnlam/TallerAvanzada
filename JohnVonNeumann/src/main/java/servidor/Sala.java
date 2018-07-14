@@ -128,6 +128,12 @@ public class Sala {
         }
     }
     
+    public void difundirSalas() {
+        for (Usuario usr : usuarios) {
+            usr.enviarListaSalas();
+        }
+    }
+    
     public Usuario obtenerUsuario(String nick) {
         for (Usuario usr : usuarios) {
             if (usr.getNick().equalsIgnoreCase(nick)) {

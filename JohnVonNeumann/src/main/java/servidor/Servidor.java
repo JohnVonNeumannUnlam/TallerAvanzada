@@ -43,6 +43,9 @@ public class Servidor {
         if (obtenerSala(s.getNombre()) == null) {
             listadoSalas.add(s);
             Log.log("Se ha creado la sala con nombre " + s.getNombre());
+            for(Sala sa: listadoSalas) {
+            	sa.difundirSalas();
+            }
         }
     }
     
