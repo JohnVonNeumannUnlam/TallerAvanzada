@@ -56,13 +56,14 @@ public class Usuario implements Runnable {
 			if (login.split("[ ]")[1].length() >= 12) {
 				// Envia un error y desconecta al usuario
 				enviar("400 El nick elegido es demasiado largo, introduce un nick de como máximo 12 carácteres");
-				Log.log("Un usuario ha tratado de entrar con un nick demasiado largo. Nick: "
-						+ login.split("[ ]")[1]);
+				Log.log("Un usuario ha tratado de entrar con un nick demasiado largo. Nick: " + login.split("[ ]")[1]);
 			} else {
 				// Conecta al cliente si el usuario no existe en la sala
 				conectado = !sala.existeUsuario(this);
 			}
 		}
+		// Envio lista de salas
+		enviarListaSalas();
 		// Si todo esta correcto se conecta a la sala
 		if (conectado) {
 			// Obtenemos el nick recibido del cliente
@@ -75,6 +76,7 @@ public class Usuario implements Runnable {
 
 			if (heartBeatOn) {
 				// Inicializamos el heartbeat para comprobar que el cliente
+
 				// mantiene la conexión
 				lastBeat = System.currentTimeMillis();
 				asyncBeatCheck();
@@ -84,6 +86,7 @@ public class Usuario implements Runnable {
 
 			// Bucle que durará hasta que el usuario se desconecte (EXIT o
 			// errores)
+
 			do {
 				// Esperamos a recibir un mensaje del cliente
 				String packet = recibir();
@@ -105,7 +108,6 @@ public class Usuario implements Runnable {
 
 	@SuppressWarnings("deprecation")
 	public void analizarPacket(String s) {
-		
 
 		if (s.startsWith("EXIT")) { // Petición de salida del chat
 			conectado = false;
@@ -124,14 +126,13 @@ public class Usuario implements Runnable {
 			}
 		} else if (s.startsWith("@" + Asistente.getNombreAsistente())) {
 			try {
-				System.out.println(s);
+//				System.out.println(s);
 				String resp = Asistente.enviar(getNick(), s);
-				System.out.println(resp);
-				sala.difundir("@"+ Asistente.getNombreAsistente() + ": " + resp);
-				Log.log("Recibido mensaje de " + Asistente.getNombreAsistente() + " en la sala "
-						+ sala.getNombre() + ". Contenido: " + resp);
+//				System.out.println(resp);
+				sala.difundir("@" + Asistente.getNombreAsistente() + ": " + resp);
+				Log.log("Recibido mensaje de " + Asistente.getNombreAsistente() + " en la sala " + sala.getNombre()
+						+ ". Contenido: " + resp);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -147,25 +148,28 @@ public class Usuario implements Runnable {
 				String oldname = nick;
 				// Comprobamos que no hay un usuario con el nuevo nick en la
 				// sala
+
 				if (sala.existeUsuario(new Usuario(p[1]))) {
-					enviar("500 Ya hay un usuario llamado " + nick
-							+ " en la sala");
+					enviar("500 Ya hay un usuario llamado " + nick + " en la sala");
 					nick = oldname;
 				} else {
 					if (!(p[1].length() > 12)) {
 						// Cambiamos el nick por el indicado
 						nick = p[1];
 						// Enviamos el listado de usuarios a todos los usuarios
+
 						// de la sala (para que reciban el nuevo nick en la
 						// lista)
 						sala.actualizarListadoUsuarios();
 						Log.log(oldname + " a cambiado de nombre a " + nick);
 						// Enviamos un mensaje a todos los usuarios de la sala
 						// indicando el cambio de nick
-						sala.difundir(oldname + " a cambiado de nombre a "
-								+ nick);
+
+
+						sala.difundir(oldname + " a cambiado de nombre a " + nick);
 						// Enviamos un mensaje indicando que se ha realizado la
 						// operación con éxito
+
 						enviar("200 OK");
 					} else {
 						enviar("500 El nick elegido es demasiado largo. Max 12 carácteres");
@@ -174,6 +178,7 @@ public class Usuario implements Runnable {
 			}
 		} else if (s.startsWith("/WHOIS ")) { // Petición de información sobre
 												// un usuario
+
 			String[] p;
 			p = s.split("[ ]");
 			if (p.length > 2) {
@@ -187,13 +192,10 @@ public class Usuario implements Runnable {
 					// Obtenemos el usuario requerido de la sala
 					Usuario tmp = sala.obtenerUsuario(p[1]);
 					// Enviamos los datos del usuario
-					enviar("======================\nNombre: " + tmp.getNick()
-							+ "\nIP: " + tmp.getIP() + "\nPing: "
-							+ tmp.getPing() + "ms\nEntrada: "
-							+ new Date(tmp.getLoginTime()).toGMTString()
+					enviar("======================\nNombre: " + tmp.getNick() + "\nIP: " + tmp.getIP() + "\nPing: "
+							+ tmp.getPing() + "ms\nEntrada: " + new Date(tmp.getLoginTime()).toGMTString()
 							+ "======================");
-					Log.log("Petición de WHOIS de " + nick + " sobre "
-							+ tmp.getNick());
+					Log.log("Petición de WHOIS de " + nick + " sobre " + tmp.getNick());
 				}
 			}
 		} else if (s.startsWith("/HELP")) { // Petición de listado de comandos
@@ -216,120 +218,69 @@ public class Usuario implements Runnable {
 				// Obtenemos el usuario al que enviaremos el mensaje
 				Usuario tmp = sala.obtenerUsuario(p[1]);
 				// Enviamos a la sala nuestro usuario, el usuario destino, y el
+
 				// contenido del mensaje privado
 				// La sala se encargará de enviar el mensaje privado solo al
 				// destinatario del mismo
-				sala.enviarMensajePrivado(this, tmp,
-						s.substring(3 + tmp.getNick().length() + 1));
-				Log.log("Mensaje privado de " + this.getNick() + " y "
-						+ tmp.getNick() + ": "
+
+
+				sala.enviarMensajePrivado(this, tmp, s.substring(3 + tmp.getNick().length() + 1));
+				Log.log("Mensaje privado de " + this.getNick() + " y " + tmp.getNick() + ": "
 						+ s.substring(3 + tmp.getNick().length()));
 			}
-		} else if (s.startsWith("/SUDO ")) { // Petición de permisos de
-												// administrador
-			String[] p;
-			p = s.split("[ ]");
-
-			// Comprobamos que la contraseña de administrador enviada coincide
-			if (p.length > 2) {
-				if (!p[1].equals(ADMIN_PASSWORD)) {
-					enviar("500 La contraseña de privilegios SUDO es incorrecta");
-				} else {
-					// Cambiamos el modo del usuario a superusuario
-					superUser = true;
-					// Enviamos un mensaje solo al usuario indicando que sus
-					// permisos se han cambiado correctamente
-					enviar("Has obtenido privilegios SUDO");
-					Log.log("Privilegios SUDO otorgados a " + nick);
-				}
-			}
-		} else if (s.startsWith("/KICK ")) { // Petición de echar a alguien del
-												// chat
-			String[] p;
-			p = s.split("[ ]");
-
-			if (p.length > 2) {
-				enviar("500 Sintaxis incorrecta");
-				Log.log("Paquete inválido: " + s);
-			} else if (!superUser) { // Comprobamos que el usuario que realiza
-										// la acción es superusuario
-				enviar("500 Permisos insuficientes");
-				Log.log("Intento del uso de comando KICK sin superusuario: "
-						+ nick);
-			} else {
-				// Comprobamos que el usuario indicado está en la sala
-				if (!sala.existeUsuario(new Usuario(p[1]))) {
-					enviar("500 No hay ningun usuario con el nombre " + p[1]);
-				} else {
-					// Obtenemos el usuario
-					Usuario tmp = sala.obtenerUsuario(p[1]);
-					// Lo desconectamos del chat
-					tmp.conectado = false;
-					// Distribuimos un mensaje indicando el kick
-					sala.difundir(nick + " ha echado a " + tmp.getNick()
-							+ " del chat");
-					// Avisamos al usuario que ha sido expulsado
-					tmp.enviar("400 Has sido expulsado del chat por " + nick);
-					Log.log(nick + " ha echado a " + tmp.getNick());
-				}
-			}
-		} else if (s.startsWith("/BAN ")) { // Petición de baneo de usuario
-											// (permanente)
-			String[] p;
-			p = s.split("[ ]");
-
-			if (p.length > 2) {
-				enviar("500 Sintaxis incorrecta");
-				Log.log("Paquete inválido: " + s);
-			} else if (!superUser) { // Comprobamos que el usuario que realiza
-										// la acción es superusuario
-				enviar("500 Permisos insuficientes");
-				Log.log("Intento del uso de comando BAN sin superusuario: "
-						+ nick);
-			} else {
-				// Comprobamos que el usuario indicado está en la sala
-				if (!sala.existeUsuario(new Usuario(p[1]))) {
-					enviar("500 No hay ningun usuario con el nombre " + p[1]);
-				} else {
-					// Obtenemos el usuario
-					Usuario tmp = sala.obtenerUsuario(p[1]);
-					// Lo desconectamos
-					tmp.conectado = false;
-					// Agregamos al usuario como baneado de la sala
-					sala.agregarBaneo(tmp);
-					// Mostramos un mensaje en la sala indicando el baneo
-					sala.difundir(nick + " ha baneado a " + tmp.getNick()
-							+ " de la sala");
-					// Avisamos al usuario que ha sido expulsado
-					tmp.enviar("400 Has sido expulsado del chat por " + nick);
-					Log.log(nick + " ha baneado a " + tmp.getNick());
-				}
-			}
-		} else if (s.startsWith("/UNBAN ")) { // Quita el baneo a un usuario
-			String[] p;
-			p = s.split("[ ]");
-
-			if (p.length > 2) {
-				enviar("500 Sintaxis incorrecta");
-				Log.log("Paquete inválido: " + s);
-			} else if (!superUser) { // Comprobamos que el usuario que realiza
-										// la acción es superusuario
-				enviar("500 Permisos insuficientes");
-				Log.log("Intento del uso de comando UNBAN sin superusuario: "
-						+ nick);
-			} else {
-				// Comprobamos que el usuario indicado está realmente en la
-				// lista de baneados de la sala
-				if (!sala.estaBaneado(new Usuario(p[1]))) {
-					enviar("500 El usuario " + p[1] + " no está baneado");
-				} else {
-					// Eliminamos al usuario de la lista de baneados de la sala
-					sala.quitarBaneo(p[1]);
-					Log.log(nick + " ha quitado el ban a " + p[1]);
-				}
-			}
+//		} else if (s.startsWith("/SUDO ")) { // Petición de permisos de
+//												// administrador
+//
+//			String[] p;
+//			p = s.split("[ ]");
+//
+//			// Comprobamos que la contraseña de administrador enviada coincide
+//			if (p.length > 2) {
+//				if (!p[1].equals(ADMIN_PASSWORD)) {
+//					enviar("500 La contraseña de privilegios SUDO es incorrecta");
+//				} else {
+//					// Cambiamos el modo del usuario a superusuario
+//					superUser = true;
+//					// Enviamos un mensaje solo al usuario indicando que sus
+//
+//					// permisos se han cambiado correctamente
+//					enviar("Has obtenido privilegios SUDO");
+//					Log.log("Privilegios SUDO otorgados a " + nick);
+//				}
+//			}
+//		} else if (s.startsWith("/KICK ")) { // Petición de echar a alguien del
+//												// chat
+//
+//			String[] p;
+//			p = s.split("[ ]");
+//
+//			if (p.length > 2) {
+//				enviar("500 Sintaxis incorrecta");
+//				Log.log("Paquete inválido: " + s);
+//			} else if (!superUser) { // Comprobamos que el usuario que realiza
+//										// la acción es superusuario
+//
+//				enviar("500 Permisos insuficientes");
+//				Log.log("Intento del uso de comando KICK sin superusuario: " + nick);
+//			} else {
+//				// Comprobamos que el usuario indicado está en la sala
+//				if (!sala.existeUsuario(new Usuario(p[1]))) {
+//					enviar("500 No hay ningun usuario con el nombre " + p[1]);
+//				} else {
+//					// Obtenemos el usuario
+//					Usuario tmp = sala.obtenerUsuario(p[1]);
+//					// Lo desconectamos del chat
+//					tmp.conectado = false;
+//					// Distribuimos un mensaje indicando el kick
+//					sala.difundir(nick + " ha echado a " + tmp.getNick() + " del chat");
+//					// Avisamos al usuario que ha sido expulsado
+//					tmp.enviar("400 Has sido expulsado del chat por " + nick);
+//					Log.log(nick + " ha echado a " + tmp.getNick());
+//				}
+//			}
 		} else if (s.startsWith("/C ")) { // Petición de creación de una nueva
 											// sala
+
 			String[] p;
 			p = s.split("[ ]");
 
@@ -346,6 +297,7 @@ public class Usuario implements Runnable {
 						sl = new Sala(p[1]);
 					} else if (p.length == 3) { // Sala con contraseña (2
 												// parametros)
+
 						// Creamos la sala
 						sl = new Sala(p[1], p[2]);
 					}
@@ -362,7 +314,10 @@ public class Usuario implements Runnable {
 						enviar("SALA " + sala.getNombre());
 						// Actualizamos la lista de usuarios para todos los
 						// usuarios de la sala
+
 						sala.actualizarListadoUsuarios();
+
+						enviarListaSalas();
 					}
 				} else {
 					enviar("500 Ya existe una sala con ese nombre");
@@ -370,6 +325,7 @@ public class Usuario implements Runnable {
 			}
 		} else if (s.startsWith("/J ")) { // Petición de entrada a una sala
 											// existente
+
 			String[] p;
 			p = s.split("[ ]");
 
@@ -380,17 +336,19 @@ public class Usuario implements Runnable {
 				// Comprobamos que la sala existe
 				if (Servidor.existeSala(new Sala(p[1]))) {
 					// Comprobamos que el usuario no esta baneado de la sala
-					if (!Servidor.obtenerSala(p[1]).estaBaneado(this)) {
+//					if (!Servidor.obtenerSala(p[1]).estaBaneado(this)) {
 						// Recibido 1 parametro (nombre sala)
 						if (p.length == 2) {
 							// Obtenemos la sala a partir del nombre
 							Sala sl = Servidor.obtenerSala(p[1]);
 							// Si tiene contraseña, indicamos que no puede
 							// entrar sin especificarla
+
 							if (sl.tienePassword()) {
 								enviar("500 Esta sala requiere contraseña");
 							} else { // Si no tiene contraseña, entramos a la
 										// sala
+
 								// Sacamos al usuario de la sala actual
 								sala.salir(this);
 								// Lo metemos en la nueva sala
@@ -401,14 +359,17 @@ public class Usuario implements Runnable {
 								enviar("SALA " + sala.getNombre());
 								// Actualizamos el listado de usuarios para
 								// todos los usuarios de la sala
+
 								sala.actualizarListadoUsuarios();
 							}
 						} else if (p.length == 3) { // Recibidos 2 parametros
 													// (nombre sala+contraseña)
+
 							// Obtenemos la sala a partir del nombre
 							Sala sl = servidor.Servidor.obtenerSala(p[1]);
 							// Comprobamos que la contraseña indicada coincide
 							// con la de la sala
+
 							if (!sl.getPassword().equalsIgnoreCase(p[2])) {
 								enviar("500 Contraseña de sala incorrecta");
 							} else { // La contraseña coincide
@@ -422,13 +383,13 @@ public class Usuario implements Runnable {
 								enviar("SALA " + sala.getNombre());
 								// Actualizamos el listado de usuarios para
 								// todos los usuarios de la sala
+
 								sala.actualizarListadoUsuarios();
 							}
 						}
-					} else {
-						enviar("500 No puedes acceder a la sala " + p[1]
-								+ " porque estas baneado en ella");
-					}
+//					} else {
+//						enviar("500 No puedes acceder a la sala " + p[1] + " porque estas baneado en ella");
+//					}
 				} else { // No existe la sala
 					enviar("500 No existe ninguna sala llamada " + p[1]);
 				}
@@ -442,6 +403,7 @@ public class Usuario implements Runnable {
 				Log.log("Paquete inválido: " + s);
 			} else {
 				// Comprobamos que el usuario que realiza esta acción tiene
+
 				// permisos de superusuario
 				if (p.length == 2 && superUser) {
 					// Comprobamos que no está eliminando la sala principal
@@ -454,9 +416,13 @@ public class Usuario implements Runnable {
 							Sala sl = servidor.Servidor.obtenerSala(p[1]);
 							// Informamos a todos los usuarios de la sala que el
 							// usuario ha eliminado la sala antes de borrarla
+
+
 							sl.difundir(nick + " ha eliminado la sala");
 							// Eliminamos la sala de la lista de salas del
 							// servidor (mueve los usuarios a la sala Principal)
+
+
 							Servidor.eliminarSala(sl);
 						} else { // No existe la sala
 							enviar("500 No existe ninguna sala llamada " + p[1]);
@@ -468,16 +434,17 @@ public class Usuario implements Runnable {
 			}
 		} else if (s.startsWith("/LIST")) { // Petición de listado de las salas
 											// disponibles
+
 			// Obtenemos un array de strings con los nombres de las salas
 			Sala[] sl = servidor.Servidor.obtenerSalas();
 			// Enviamos la información de las salas al usuario que realiza la
 			// petición
+
 			enviar("===========================");
 			enviar("Salas disponibles: " + sl.length);
 			enviar("===========================");
 			for (Sala sl1 : sl) {
-				enviar(sl1.getNombre() + " - Usuarios: "
-						+ sl1.getCountUsuarios()
+				enviar(sl1.getNombre() + " - Usuarios: " + sl1.getCountUsuarios()
 						+ ((sl1.tienePassword()) ? " (con contraseña)" : ""));
 			}
 			enviar("===========================");
@@ -490,9 +457,9 @@ public class Usuario implements Runnable {
 			if (s.length() < 500) {
 				// Difundimos el mensaje recibido a todos los usuarios de la
 				// sala
+
 				sala.difundir(nick + ": " + s);
-				Log.log("Recibido mensaje de " + nick + " en la sala "
-						+ sala.getNombre() + ". Contenido: " + s);
+				Log.log("Recibido mensaje de " + nick + " en la sala " + sala.getNombre() + ". Contenido: " + s);
 			} else {
 				Log.log("Recibido mensaje demasiado largo de " + nick);
 			}
@@ -509,13 +476,23 @@ public class Usuario implements Runnable {
 		enviar(strb.toString());
 	}
 
+	public void enviarListaSalas() {
+		StringBuilder strb = new StringBuilder();
+		strb.append("LSALAS ");
+		Sala[] s = Servidor.obtenerSalas();
+		for (Sala sal : s) {
+			strb.append(sal.getNombre());
+			strb.append(" ");
+		}
+		enviar(strb.toString());
+	}
+
 	public void enviar(String s) {
 		try {
 			salida.write(s + "\n");
 			salida.flush();
 		} catch (IOException ex) {
-			Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null,
-					ex);
+			Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -524,6 +501,7 @@ public class Usuario implements Runnable {
 		try {
 			s = entrada.readLine();
 		} catch (Exception ex) {
+			Log.log(ex.getStackTrace().toString());
 		}
 		return s;
 	}
@@ -582,6 +560,8 @@ public class Usuario implements Runnable {
 			public void run() {
 				// Continuamos comprobando que está conectado el usuario
 				// mientras que este siga realmente conectado
+
+
 				while (conectado) {
 					// Esperamos 1 segundo
 					try {
@@ -589,6 +569,7 @@ public class Usuario implements Runnable {
 					} catch (InterruptedException ex) {
 					}
 					// Comprobamos que no han pasado más de 7 segundos desde que
+
 					// se envió el último heartbeat
 					if (System.currentTimeMillis() - lastBeat >= 7000) {
 						// Desconectamos al usuario por inactividad
