@@ -4,10 +4,8 @@ public class Calculadora {
 
 
 	public static String resolverCalculo(String mensaje) {
-			String aux = mensaje.substring(mensaje.lastIndexOf(" ")).trim();
+			String aux = mensaje.substring(1, mensaje.length()-1);
 			String resultado = calcularFormat(aux, "%.3f");
-			
-		
 		return resultado;
 	}
 	
