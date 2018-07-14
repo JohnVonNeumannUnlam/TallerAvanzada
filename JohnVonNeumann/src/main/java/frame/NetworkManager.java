@@ -43,29 +43,18 @@ public class NetworkManager {
                     String[] p = packet.split("[ ]");
                     interfaz.setTitle("Sala " + p[1] + "@" + socket.getInetAddress().getHostAddress());
                 } else if (packet.startsWith("LIST")) {
-//                	System.out.println(packet);
-//                	System.out.println("rimo todo con ado");
                     interfaz.limpiarListado();
                     int count = packet.split(" ").length;
                     for (int i = 1; i < count; i++) {
                         Usuario u = new Usuario(packet.split(" ")[i], null);
                         interfaz.agregarUsuario(u);
-//                        Sala [] s = Servidor.obtenerSalas(); 
-//                        
-//                        for(int j=0; j<s.length; j++)
-//                        	interfaz.agregarSala(s[j]);
                     }
-
-
-                    
-                    //interfaz.actualizarLista();
 
 
 				}else if (packet.startsWith("LSALAS")) {
                 	interfaz.limpiarSalas();
                     int count = packet.split("[ ]").length;
                     for (int i = 1; i < count; i++) {
-//                        Usuario u = new Usuario(packet.split("[ ]")[i], null);
                         interfaz.agregarSala(packet.split("[ ]")[i]);
                     } 
 

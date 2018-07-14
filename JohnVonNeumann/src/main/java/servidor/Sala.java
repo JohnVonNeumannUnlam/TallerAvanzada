@@ -7,20 +7,17 @@ public class Sala {
     private ArrayList<Usuario> usuarios;
     private String nombre;
     private String password;
-//    private ArrayList<Usuario> baneados;
     
     public Sala(String nombre) {
         this.nombre = nombre;
         this.password = "";
         this.usuarios = new ArrayList<>();
-//        this.baneados = new ArrayList<>();
     }
     
     public Sala(String nombre, String pw) {
         this.nombre = nombre;
         this.password = pw;
         this.usuarios = new ArrayList<>();
-//        this.baneados = new ArrayList<>();
     }
     
     public String entrar(Usuario u) {
@@ -40,11 +37,6 @@ public class Sala {
                 //Enviamos el nombre de la sala al usuario
                 u.enviar("SALA " + this.nombre);
                 return "200 OK";
-//            } else {
-//                //Desconectamos al usuario
-//                u.setConectado(false);
-//                return "400 Estas baneado de esta sala";
-//            }
         } else {
             //Desconectamos al usuario
             u.setConectado(false);
@@ -57,8 +49,6 @@ public class Sala {
         if (!existeUsuario(u)) {
             //Comprueba que la contraseña es correcta
             if (pw.equals(this.password)) {
-                //Comprueba que el usuario no está baneado de la sala
-//                if (!estaBaneado(u)) {
                     //Conecta al usuario
                     u.setConectado(true);
                     //Añadimos al usuario a la lista de usuarios de la sala
@@ -71,11 +61,6 @@ public class Sala {
                     //Enviamos el nombre de la sala al usuario
                     u.enviar("SALA " + this.nombre);
                     return "200 OK";
-//                } else {
-//                    //Desconectamos al usuario
-//                    u.setConectado(false);
-//                    return "400 Estas baneado de esta sala";
-//                }
             } else {
                 //Enviamos un error de contraseña al usuario
                 return "500 La contraseña de la sala es incorrecta";
@@ -113,15 +98,6 @@ public class Sala {
         return false;
     }
     
-//    public boolean estaBaneado(Usuario u) {
-//        for (Usuario usr : baneados) {
-//            if (usr.getNick().equals(u.getNick()) || usr.getIP().equals(u.getIP())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-    
     public void difundir(String mensaje) {
         for (Usuario usr : usuarios) {
             usr.enviar(mensaje);
@@ -142,19 +118,6 @@ public class Sala {
         }
         return null;
     }
-    
-//    public void agregarBaneo(Usuario u) {
-//        baneados.add(u);
-//    }
-//    
-//    public void quitarBaneo(String usr) {
-//        for (int i = 0; i < baneados.size(); i++) {
-//            if (baneados.get(i).getNick().equals(usr)) {
-//                baneados.remove(i);
-//                break;
-//            }
-//        }
-//    }
     
     public void enviarMensajePrivado(Usuario de, Usuario a, String mensaje) {
         //Muestra el mensaje al remitente

@@ -75,13 +75,6 @@ public class Calculadora {
 			if (div != 0)
 				return calcular(cad.substring(0, div)) - calcular(cad.substring(div + 1));
 			return -calcular(cad.substring(div + 1));
-			/*
-			 * double izq = calcular(cad.substring(0, div)); int fin = 0; double num = 0;
-			 * while (cad.length() - 1 > fin + div && Character.isDigit(cad.substring(div +
-			 * 1).charAt(fin))) { fin++; } num = -1 * Double.parseDouble(cad.substring(div +
-			 * 1, div + 1 + fin)); cad = (izq + num) + cad.substring(div + fin + 1); return
-			 * calcular(cad);
-			 */
 		}
 
 		if (cad.contains("/")) {

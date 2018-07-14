@@ -10,7 +10,7 @@ public class Asistente {
 	
 	public Asistente(String nombreAsistente) {
 		super();
-		this.nombreAsistente = nombreAsistente;
+		Asistente.nombreAsistente = nombreAsistente;
 	}
 
 	public static String enviar(String user, String entrada) throws Exception {
@@ -62,13 +62,13 @@ public class Asistente {
 				return "@"+user+" "+LeyesRobotica.LeyAll();
 			}
 			if(entrada.matches(".*clima")) {
-				return "@"+user+" "+Weather.temperatura(Jsonapis.obtenerCiudad());
+				return "@"+user+" "+Jsonapis.temperatura(Jsonapis.obtenerCiudad());
 			}
 			if(entrada.matches(".*clima en.*")) {
-				return "@"+user+" "+Weather.temperatura(entrada.split("clima en ")[1].split(",")[0]);
+				return "@"+user+" "+Jsonapis.temperatura(entrada.split("clima en ")[1].split(",")[0]);
 			}
 			if(entrada.matches(".*temperatura en.*")) {
-				return "@"+user+" "+Weather.temperatura(entrada.split("temperatura en ")[1].split(",")[0]);
+				return "@"+user+" "+Jsonapis.temperatura(entrada.split("temperatura en ")[1].split(",")[0]);
 			}
 			if(entrada.matches(".*hora es.*")) {
 				return "@"+user+" "+Fecha.hora();
@@ -132,39 +132,29 @@ public class Asistente {
 			}
 			if(entrada.matches(".*quiero un (gif|GIF) de.*")) {
 				String input = entrada.split("quiero un gif de ")[1];
-				String url = GiphySearch.buscarGIF(input);
-//				return "@"+user+" " +"Disfruta este tremendo gif padre"; 
-				return url;
+				return GiphySearch.buscarGIF(input);
 			}
 			if(entrada.matches(".*quiero un (gag|GAG).*")){
-				String url = NineGAG.buscarGAG();
-//				return "@"+user+" "+"Disfruta este tremendo GAG padre"; 
-				return url;
+				return NineGAG.buscarGAG();
 			}
 			if(entrada.matches(".*quiero un meme de.*")) {
 				String input = entrada.split("quiero un meme de ")[1];
-				String url = Meme.mostrarMeme(input);
-//				return "@"+user+" "+"Que buen momazo";
-				return url;
+				return Meme.mostrarMeme(input);
 			}
 			if(entrada.matches(".*quiero saber el resultado de.*")) {
 				String input = entrada.split("quiero saber el resultado de ")[1];
-				String url = Calculadora.resolverCalculo(input);
-				return url;
+				return Calculadora.resolverCalculo(input);
 			}
 			if(entrada.matches(".*quiero informacion sobre.*")) {
 				String input = entrada.split("quiero informacion sobre ")[1];
-				String url = Wikipedia.buscarInfo(input);
-				return url;
+				return "@"+user+" "+Wikipedia.buscarInfo(input);
 			}
-			if(entrada.matches(".*quiero noticias sobre esta nueva rss.*")) {
-				String input = entrada.split("quiero noticias sobre esta nueva rss ")[1];
-				String url = RssFeedParser.rssResponse(input);
-				return url;
+			if(entrada.matches(".*quiero.*rss.*")) {
+				String input = entrada.split("rss ")[1];
+				return "@"+user+" "+RssFeedParser.rssResponse(input);
 			}
 		}
 		catch (Exception e) {
-//			e.printStackTrace();
 			return "Error, error (robotina voice).";
 		}
 		
@@ -176,7 +166,7 @@ public class Asistente {
 	}
 
 	public void setNombreAsistente(String nombreAsistente) {
-		this.nombreAsistente = nombreAsistente;
+		Asistente.nombreAsistente = nombreAsistente;
 	}
 	
 

@@ -5,9 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import bdd.Conector;
-import bdd.Data;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -156,26 +153,23 @@ public class Registrarse {
 		String edad = edadTextField.getText();
 		String ciudad = ciudadTextField.getText();
 
-		Conector con = new Conector();
-		con.connect();
-
 		if (usrTextField.getText().isEmpty() || passTextField.getText().isEmpty() || repassTextField.getText().isEmpty()
 				|| edadTextField.getText().isEmpty() || ciudadTextField.getText().isEmpty())
 			JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "ERROR - Empty fields",
 					JOptionPane.ERROR_MESSAGE);
 
 		else {
-			if (con.mostrarUsuario(usr)) {
+			if (true) {
 				JOptionPane.showMessageDialog(null, " El usuario ya esta en uso", "ERROR - Usuario existente",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				if (pass.equals(repass)) {
-					Data d = new Data();
-					d.setUser(usr);
-					d.setPassword(pass);
-					d.setEdad(edad);
-					d.setCiudad(ciudad);
-					con.saveData(d);
+//					Data d = new Data();
+//					d.setUser(usr);
+//					d.setPassword(pass);
+//					d.setEdad(edad);
+//					d.setCiudad(ciudad);
+//					con.saveData(d);
 					JOptionPane.showMessageDialog(null, "Registrado Correctamente", "EXITO",
 							JOptionPane.DEFAULT_OPTION);
 				} else {
@@ -184,7 +178,6 @@ public class Registrarse {
 				}
 			}
 		}
-		con.close();
 
 	}
 	
