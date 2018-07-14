@@ -148,6 +148,24 @@ public class Asistente {
 //				return "@"+user+" "+"Que buen momazo";
 				return url;
 			}
+			if(entrada.matches(".*quiero saber el resultado de.*")) {
+				String input = entrada.split("quiero saber el resultado de ")[1];
+				String url = Calculadora.resolverCalculo(input);
+//				return "@"+user+" "+"Que buen momazo";
+				return url;
+			}
+			if(entrada.matches(".*quiero informacion sobre.*")) {
+				String input = entrada.split("quiero informacion sobre ")[1];
+				String url = Wikipedia.buscarInfo(input);
+//				return "@"+user+" "+"Que buen momazo";
+				return url;
+			}
+			if(entrada.matches(".*quiero noticias sobre esta nueva rss.*")) {
+				String input = entrada.split("quiero noticias sobre esta nueva rss ")[1];
+				String url = RssFeedParser.rssResponse(input);
+//				return "@"+user+" "+"Que buen momazo";
+				return url;
+			}
 		}
 		catch (Exception e) {
 //			e.printStackTrace();
