@@ -35,6 +35,7 @@ public class VentanaChat extends javax.swing.JFrame {
 	NetworkManager net;
 	DefaultListModel<String> mlu;
 	DefaultListModel<String> salas;
+	String user;
 
 	public VentanaChat(servidor.Usuario u) {
 
@@ -42,6 +43,7 @@ public class VentanaChat extends javax.swing.JFrame {
 		net.setServer(leerIP(), 2014);
 		net.setInterfaz(this);
 		net.enviar("NICK " + u.getNick());
+		user = u.getNick();
 		mlu = new DefaultListModel<>();
 		salas = new DefaultListModel<>();
 		initComponents();
@@ -263,9 +265,12 @@ public class VentanaChat extends javax.swing.JFrame {
 					doc.insertString(doc.getLength(), "\n" + usuario + " ", null);
 					areaMensajes.insertIcon(ico);
 				} else
+					if(s.contains("@"+user))
+						notificacionTag(s.split(":")[0]);
 					doc.insertString(doc.getLength(), "\n" + s, null);
-			} else
+			} else 
 				areaMensajes.setText(s);
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -299,6 +304,10 @@ public class VentanaChat extends javax.swing.JFrame {
 
 	private String leerSala() {
 		return JOptionPane.showInputDialog(null, "Introduce el nombre de la nueva sala", "Sala");
+	}
+	
+	private void notificacionTag(String s) {
+		JOptionPane.showMessageDialog(null,"Cuchame capo, "+s+" te está buscando, dale bola.");
 	}
 
 }

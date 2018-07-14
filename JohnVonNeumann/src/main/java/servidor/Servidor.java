@@ -25,8 +25,8 @@ public class Servidor {
         //la sala por defecto y la agregamos al listado de salas
         listadoSalas = new ArrayList<>();
         Sala sala = new Sala("Principal");
-        Asistente a = new Asistente("KHEA");
-        System.out.println(a);
+        Asistente a = new Asistente("Robotitus");
+//        System.out.println(a);
         agregarSala(sala);
         
         //Bucle infinito que espera peticiones de conexión y crea instancias independientes para cada una
