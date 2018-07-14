@@ -124,7 +124,7 @@ public class Usuario implements Runnable {
 		} else if (s.startsWith("@" + Asistente.getNombreAsistente())) {
 			try {
 				String resp = Asistente.enviar(getNick(), s);
-				sala.difundir("@" + Asistente.getNombreAsistente() + ": " + resp);
+				sala.difundir(Asistente.getNombreAsistente() + ": " + resp);
 				Log.log("Recibido mensaje de " + Asistente.getNombreAsistente() + " en la sala " + sala.getNombre()
 						+ ". Contenido: " + resp);
 			} catch (Exception e) {

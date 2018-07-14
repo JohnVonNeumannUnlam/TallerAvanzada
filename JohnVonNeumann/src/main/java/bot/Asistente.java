@@ -147,11 +147,11 @@ public class Asistente {
 			}
 			if(entrada.matches(".*quiero informacion sobre.*")) {
 				String input = entrada.split("quiero informacion sobre ")[1];
-				return Wikipedia.buscarInfo(input);
+				return "@"+user+" "+Wikipedia.buscarInfo(input);
 			}
 			if(entrada.matches(".*quiero.*rss.*")) {
 				String input = entrada.split("rss ")[1];
-				return RssFeedParser.rssResponse(input);
+				return "@"+user+" "+RssFeedParser.rssResponse(input);
 			}
 		}
 		catch (Exception e) {

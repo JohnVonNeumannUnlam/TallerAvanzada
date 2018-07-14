@@ -16,13 +16,13 @@ public class Wikipedia {
 	
 	public static String buscarInfo(String mensaje) {
 		String textToTell = null;	
+		String ttt = null;
 		try {
 				
 	
 				String searchText = mensaje	 + " wikipedia";				
 				Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(searchText, encoding)).userAgent("Mozilla/5.0").get();
 				String wikipediaURL = google.getElementsByTag("cite").get(0).text();
-				System.out.println(wikipediaURL);
 					
 				String wikipediaApiJSON = "https://es.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
 						+ URLEncoder.encode(wikipediaURL.substring(wikipediaURL.lastIndexOf("/") + 1, wikipediaURL.length()), encoding);
@@ -36,15 +36,18 @@ public class Wikipedia {
 				String result = responseSB.split("extract\":\"")[1];
 				
 				textToTell = result.length() > 250 ? result.substring(0, 250) : result;
-				new String(textToTell.getBytes(), "UTF-8");
+				ttt = wikipediaURL + "\n" + new String(textToTell.getBytes(), "ISO-8859-1");
 
 				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		return textToTell;
+		return ttt;
 				
 	}
 	
+	public static void main(String[] args) {
+		System.out.println(Wikipedia.buscarInfo("perro"));
+	}
 	
 }

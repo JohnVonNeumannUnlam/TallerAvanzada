@@ -106,6 +106,7 @@ public class VentanaChat extends javax.swing.JFrame {
 		JButton crearSalaBoton = new JButton("Crear Sala");
 		crearSalaBoton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				areaMensajes.setText("");
 				net.enviar("/C " + leerSala());
 			}
 		});
@@ -154,6 +155,7 @@ public class VentanaChat extends javax.swing.JFrame {
 				if (arg0.getClickCount() == 2) {
 					int index = list.locationToIndex(arg0.getPoint());
 					String sala = (String) list.getModel().getElementAt(index);
+					areaMensajes.setText("");
 					net.enviar("/J " + sala);
 				}
 			}
@@ -203,8 +205,6 @@ public class VentanaChat extends javax.swing.JFrame {
 
 	public void agregarMensaje(String s) {
 
-//		System.out.println(s);
-
 		Document doc = areaMensajes.getDocument();
 
 		try {
@@ -220,10 +220,11 @@ public class VentanaChat extends javax.swing.JFrame {
 					ico = new ImageIcon(newimg);
 					doc.insertString(doc.getLength(), "\n" + usuario + " ", null);
 					areaMensajes.insertIcon(ico);
-				} else
+				} else {
 					if(s.contains("@"+user))
 						notificacionTag(s.split(":")[0]);
 					doc.insertString(doc.getLength(), "\n" + s, null);
+				}
 			} else 
 				areaMensajes.setText(s);
 				
@@ -247,11 +248,6 @@ public class VentanaChat extends javax.swing.JFrame {
 		jList1.setFixedCellHeight(20);
 		setLocationRelativeTo(null);
 		fieldMsg.requestFocus();
-	}
-
-	private String leerIP() {
-		return "localhost";
-
 	}
 
 	private String leerSala() {
